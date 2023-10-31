@@ -26,7 +26,20 @@ app.get("/get-liveblog", async (req, res) => {
       title: title,
       link: link,
     };
+    const news = [];
+    $("ul.fte-featured li.fte-featured-articles-list__item").each(
+      (index, element) => {
+        const articleLink =
+          "https://www.aljazeera.net" +
+          $(element).find("a.u-clickable-card__link").attr("href");
+        const articleTitle = $(element).find("a.u-clickable-card__link").text();
 
+        news.push({
+          link: articleLink,
+          title: articleTitle,
+        });
+      }
+    );
     // Select all <li> elements with the specified class and extract information
     const extractedInfo = [];
     $("li.liveblog-timeline__update").each((index, element) => {
@@ -45,6 +58,7 @@ app.get("/get-liveblog", async (req, res) => {
     const responseObj = {
       headline: headline,
       blogs: extractedInfo,
+      news: news,
     };
 
     res.json(responseObj);
